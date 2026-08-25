@@ -8,3 +8,8 @@ __pycache__/
 service_accounts_data.json
 .vscode/
 .env
+build/
+dist/
+service-account.json
+credentials_gschigh.json
+credentials_gsclow.json

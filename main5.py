@@ -34,7 +34,7 @@ from app1 import get_gsc_data
 # ==================================================
 # VERSION & UPDATES
 # ==================================================
-CURRENT_VERSION = "9.1"
+CURRENT_VERSION = "9.2"
 GITHUB_REPO = "ubuyaiteam/seo-automation-tool"
 GITHUB_TOKEN = None  # If repo becomes private, put a fine-grained read-only PAT here
 

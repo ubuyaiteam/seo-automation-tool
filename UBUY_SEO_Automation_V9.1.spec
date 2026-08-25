@@ -13,13 +13,17 @@ datas = [
 binaries = []
 hiddenimports = ['pkg_resources.py2_warn', 'pkg_resources.markers', 'win10toast', 'PIL', 'openpyxl', 'googleapiclient', 'pkg_resources', 'setuptools']
 
-# Auto-collect selenium and webdriver_manager hooks to prevent runtime errors
+
+# Auto-collect essential modules
 tmp_ret = collect_all('selenium')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 tmp_ret = collect_all('webdriver_manager')
+datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 tmp_ret = collect_all('win10toast')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
-
+tmp_ret = collect_all('googleapiclient')
+datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
+tmp_ret = collect_all('google.oauth2')
 datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
 
 a = Analysis(
@@ -43,7 +47,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='UBUY_SEO_Automation_V9.1',
+    name='UBUY_SEO_Automation_V9.2',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

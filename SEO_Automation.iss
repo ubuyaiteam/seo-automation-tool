@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "UBUY SEO Automation"
-#define MyAppVersion "9.1"
+#define MyAppVersion "9.2"
 #define MyAppPublisher "AI Team Ubuy"
 #define MyAppURL "https://www.ubuy.com/"
 #define MyAppExeName "UBUY_SEO_Automation_V9.1.exe"
@@ -24,7 +24,7 @@ DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users.)
 PrivilegesRequired=lowest
 OutputDir=.
-OutputBaseFilename=SEO_Tool_V9.1_Setup
+OutputBaseFilename=SEO_Tool_V9.2_Setup
 SetupIconFile=icon.ico
 Compression=lzma
 SolidCompression=yes
