@@ -31,6 +31,101 @@ from app1 import get_gsc_data
 
 # Local JSON Storage (AppData Migration)
 
+# ==================================================
+# VERSION & UPDATES
+# ==================================================
+CURRENT_VERSION = "9.1"
+GITHUB_REPO = "ubuyaiteam/seo-automation-tool"
+GITHUB_TOKEN = None  # If repo becomes private, put a fine-grained read-only PAT here
+
+def check_for_updates(root):
+    import urllib.request
+    import json
+    import threading
+    import subprocess
+    import tempfile
+    
+    def update_task():
+        try:
+            url = f"https://api.github.com/repos/{GITHUB_REPO}/releases/latest"
+            req = urllib.request.Request(url)
+            if GITHUB_TOKEN:
+                req.add_header("Authorization", f"Bearer {GITHUB_TOKEN}")
+            
+            with urllib.request.urlopen(req, timeout=10) as response:
+                data = json.loads(response.read().decode())
+                latest_version = data.get("tag_name", "").replace("v", "").strip()
+                
+                if latest_version and latest_version != CURRENT_VERSION:
+                    # Found a new version!
+                    download_url = None
+                    asset_url = None
+                    for asset in data.get("assets", []):
+                        if asset.get("name", "").endswith(".exe"):
+                            download_url = asset.get("browser_download_url")
+                            asset_url = asset.get("url")
+                            break
+                    
+                    if download_url:
+                        root.after(0, lambda: prompt_update(latest_version, download_url, asset_url))
+        except Exception as e:
+            print("Update check failed:", e)
+
+    def prompt_update(latest_version, download_url, asset_url):
+        ans = messagebox.askyesno(
+            "Update Available",
+            f"A new version of the SEO Automation Tool (v{latest_version}) is available!\n\nWould you like to download and install it now?"
+        )
+        if ans:
+            download_and_install(download_url, asset_url)
+
+    def download_and_install(download_url, asset_url):
+        dl_window = tk.Toplevel(root)
+        dl_window.title("Downloading Update")
+        dl_window.geometry("300x120")
+        dl_window.attributes("-topmost", True)
+        
+        lbl = tk.Label(dl_window, text="Downloading the latest version...\nPlease wait.", font=("Segoe UI", 10))
+        lbl.pack(expand=True, pady=10)
+        
+        progress = ttk.Progressbar(dl_window, mode='indeterminate')
+        progress.pack(fill="x", padx=20, pady=10)
+        progress.start()
+        
+        dl_window.update()
+        
+        def do_download():
+            try:
+                temp_dir = tempfile.gettempdir()
+                installer_path = os.path.join(temp_dir, "SEO_Tool_Update_Setup.exe")
+                
+                if GITHUB_TOKEN:
+                    # Download via API for private repo
+                    req = urllib.request.Request(asset_url)
+                    req.add_header("Authorization", f"Bearer {GITHUB_TOKEN}")
+                    req.add_header("Accept", "application/octet-stream")
+                    with urllib.request.urlopen(req, timeout=60) as response:
+                        with open(installer_path, "wb") as f:
+                            shutil.copyfileobj(response, f)
+                else:
+                    # Public repo download
+                    urllib.request.urlretrieve(download_url, installer_path)
+                
+                # Launch installer completely silently, then force exit
+                # Added /FORCECLOSEAPPLICATIONS which handles anything blocking it
+                subprocess.Popen([installer_path, "/VERYSILENT", "/SUPPRESSMSGBOXES", "/FORCECLOSEAPPLICATIONS"])
+                
+                # Exit the python script immediately so the installer can overwrite
+                os._exit(0)
+            except Exception as e:
+                root.after(0, lambda: dl_window.destroy())
+                root.after(0, lambda: messagebox.showerror("Update Error", f"Failed to download update:\n{e}"))
+                
+        threading.Thread(target=do_download, daemon=True).start()
+
+    threading.Thread(target=update_task, daemon=True).start()
+
+
 
 # ==================================================
 # SYSTEM UTILITIES

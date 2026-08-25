@@ -8,6 +8,7 @@
 #define MyAppExeName "UBUY_SEO_Automation_V9.1.exe"
 
 [Setup]
+CloseApplications=force
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{D7DC7432-2BC4-4147-B8DF-D28063BCF0E6}
