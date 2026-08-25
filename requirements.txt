@@ -1,0 +1,11 @@
+requests
+urllib3
+win10toast
+google-api-python-client
+google-auth
+google-auth-oauthlib
+selenium
+webdriver-manager
+Pillow
+openpyxl
+customtkinter
